@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.OrderDao">
+
+  <resultMap type="Order" id="orderMap">
+    <id column="MNO" property="no"/>
+    <result column="ORDERNO" property="orderno"/>
+    <result column="TABLENO" property="tableNo"/>
+    <result column="ODATE" property="odate"/>
+    <result column="SELECTMENU" property="selectmenu"/>
+  </resultMap>
+
+  <sql id="orderSelect">
+    SELECT ODATE TNO  
+    FROM MENUS
+  </sql>
+  
+  <select id="selectList" parameterType="map" resultMap="orderMap">
+    <include refid="orderSelect"/>
+    <if test="pageSize > 0">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+  
+  <select id="selectOne" parameterType="int" resultMap="orderMap">
+    <include refid="orderSelect"/> 
+    WHERE MNO=#{value}
+  </select>
+  
+  <insert id="insert" parameterType="Order">
+    INSERT INTO MENUS(MNAME,MPRICE,RDATE) 
+    VALUES (#{name}, #{price}, #{reg_date})
+  </insert>
+  
+  <update id="update" parameterType="Order">
+    UPDATE MENUS SET 
+      MNAME=#{name},
+      MPRICE=#{price},
+      RDATE=#{reg_date} 
+    WHERE MNO=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    DELETE FROM MENUS WHERE MNO=#{value}
+  </delete>
+</mapper>

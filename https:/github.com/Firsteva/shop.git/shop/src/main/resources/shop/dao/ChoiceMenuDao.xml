@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.ChoiceMenuDao">
+
+  <resultMap type="Menu" id="menuMap">
+    <id column="MNO" property="no"/>
+    <result column="MNAME" property="name"/>
+    <result column="MPRICE" property="price"/>
+  </resultMap>
+  
+  <sql id="menuSelect">
+    SELECT MNO, MNAME, MPRICE,
+    FROM MENUS
+  </sql>
+  
+  <select id="selectList" parameterType="map" resultMap="menuMap">
+    <include refid="menuSelect"/>
+    <if test="pageSize > 0">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+  
+  <select id="selectOne" parameterType="int" resultMap="menuMap">
+    <include refid="menuSelect"/> 
+    WHERE MNO=#{value}
+  </select>
+  
+  <insert id="insert" parameterType="Menu">
+    INSERT INTO MENUS(MNAME,MPRICE) 
+    VALUES (#{name}, #{price})
+  </insert>
+  
+  <update id="update" parameterType="Menu">
+    UPDATE MENUS SET 
+      MNAME=#{name},
+      MPRICE=#{price} 
+    WHERE MNO=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    DELETE FROM MENUS WHERE MNO=#{value}
+  </delete>
+</mapper>
